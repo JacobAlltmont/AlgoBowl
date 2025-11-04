@@ -46,8 +46,8 @@ def solve_game():
         return
 
     # print the rows in matrix form
-    # for rrow in rows:
-    #     print(' '.join(str(v) for v in rrow))
+    for rrow in rows:
+        print(' '.join(str(v) for v in rrow))
 
 
 def validate_colors(rows, valid_set):
