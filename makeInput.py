@@ -1,11 +1,12 @@
 import random
 
-rows, cols = 90, 90
+rows, cols = 10, 10
 
-with open("input90x90.txt", "w") as f:
+with open(f"input{rows}x{cols}.txt", "w") as f:
     f.write(f"{rows} {cols}\n")
     for _ in range(rows):
         line = "".join(str(random.randint(1, 8)) for _ in range(cols))
-        f.write(line + "\n")
+        # f.write(line + "\n")
+        f.write(line)
 
-print("input90x90.txt created.")
+print(f"input{rows}x{cols}.txt created.")
