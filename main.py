@@ -69,7 +69,7 @@ class game:
         store using tuples
         '''
         for i,j in removed_cells_positions:
-            print("{i},{j})
+            print("{i},{j}")
 
     def validate_colors(rows, valid_set):
         for rrow in rows:
