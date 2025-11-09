@@ -101,7 +101,28 @@ def remove_logic(curr_removed_cells, rows):
                 curr_removed_cells[rows[row][col]] = (row,col+1)
                 visited.append((row,col+1))
 
-    
+
+def inverse_matrix(matrix):
+    """
+    Rotate the matrix by 180 degrees so top-left becomes bottom-right.
+    Returns a new list-of-lists with integer entries.
+    """
+    # Validate input is rectangular
+    if not matrix or not all(len(row) == len(matrix[0]) for row in matrix):
+        raise ValueError("Input must be a non-empty rectangular matrix")
+
+    # Simple Python implementation (no numeric inversion)
+    # Reverse the order of rows, and reverse each row
+    rotated = [row[::-1] for row in matrix[::-1]]
+
+    # Ensure elements are ints
+    try:
+        rotated = [[int(x) for x in row] for row in rotated]
+    except Exception as e:
+        raise ValueError(f"Non-integer matrix elements: {e}")
+
+    return rotated
+
 def remove_column_logic(): 
     '''
     '''
