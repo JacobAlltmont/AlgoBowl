@@ -74,11 +74,20 @@ class game:
 
 
 
+    def remove_logic(self, curr_removed_cells):
+        self.removed_cells += len(curr_removed_cells)
+        self.removed_cells_positions += curr_removed_cells
 
+        # Removing cells from rows
+        for i in len(curr_removed_cells): # i is a row, rows are arrays
+            for j in len(i): # getting a single cell
+                
+
+        
 
     # parts that need to be implimented:
     # 1. remove logic; this includes what is allowed to be removed and 
-    #    removing from the matrix than updating the matrix cells like in 
+    #    removing from the matrix then updating the matrix cells like in 
     #    the game
     # 2. point system; this includes how many points you get for removing 
     #    certain color combos/number of a color removed
