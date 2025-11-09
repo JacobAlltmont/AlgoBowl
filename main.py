@@ -2,8 +2,9 @@ class game:
     def __init__(self):
         self.total_points = 0
         self.points = []
+        self.moves = 0 
         self.removed_cells = 0
-        self.removed_cells_positions = []
+        self.removed_cell_info = [] 
 
     def solve_game(self):
         # Inputs
@@ -40,7 +41,7 @@ class game:
 
             # convert strings to ints and append
             rows.append([int(x) for x in row])
-
+        
         # valid color set (1..8)
         valid = set(range(1, 9))
 
@@ -62,8 +63,13 @@ class game:
     
     def output_game(self):
         print("Total Points:", self.total_points)
+        print("Total moves:" self.moves)
         print("Removed Cells:", self.removed_cells)
-        print("Removed Cells Positions:", self.removed_cells_positions)
+        '''
+        store using tuples
+        '''
+        for i,j in removed_cells_positions:
+            print("{i},{j})
 
     def validate_colors(rows, valid_set):
         for rrow in rows:
@@ -85,14 +91,14 @@ class game:
 
         
 
-    # parts that need to be implimented:
-    # 1. remove logic; this includes what is allowed to be removed and 
-    #    removing from the matrix then updating the matrix cells like in 
+    # parts that need to be implemented:
+    # 1. Remove logic; this includes what is allowed to be removed and 
+    #    removing from the matrix, then updating the matrix cells like in 
     #    the game
     # 2. point system; this includes how many points you get for removing 
     #    certain color combos/number of a color removed
     # 3. output; this includes how to output the results of the game in its format
-    # 4. making a reverse matrix so that the bottom left corner is (1,1)
+    # 4. Making a reverse matrix so that the bottom left corner is (1,1)
 
     if __name__ == "__main__":
         solve_game()
