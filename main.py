@@ -1,9 +1,4 @@
-def __init__():
-        total_points = 0
-        points = []
-        moves = 0 
-        removed_cells = 0
-        removed_cell_info = [] 
+import numpy as np
 
 def solve_game():
     # Inputs
@@ -19,7 +14,7 @@ def solve_game():
     for _ in range(r):
         # read a row; if a blank line is encountered, read the next one
         s = input().strip()
-        if not s:
+        while s == "":
             s = input().strip()
 
         # support two formats:
@@ -32,7 +27,7 @@ def solve_game():
             print(f"Expected {c} values per row but got {len(row)}")
             return
 
-        # ensure tokens are digits (integers) using an explicit for-loop
+        # ensure tokens are digits (integers)
         for x in row:
             if not x.isdigit():
                 print("All colors must be integers")
@@ -40,7 +35,7 @@ def solve_game():
 
         # convert strings to ints and append
         rows.append([int(x) for x in row])
-        
+
     # valid color set (1..8)
     valid = set(range(1, 9))
 
@@ -51,6 +46,14 @@ def solve_game():
         print(bad)
         return
 
+    # Only rotate if matrix is square and has proper dimensions
+    if r == c and r >= 2:
+        try:
+            rows = inverse_matrix(rows)
+        except ValueError as e:
+            print(f"Matrix rotation failed: {e}")
+            return
+
     # print the rows in matrix form
     for rrow in rows:
         print(' '.join(str(v) for v in rrow))
@@ -59,13 +62,13 @@ def game_score(number_of_cells):
     # Calculate the score based on the current state of the game
     total_points = (number_of_cells-1)**2
     return total_points
-    
+
 def output_game(total_points, moves, removed_cells, removed_cells_positions):
     print("Total Points:", total_points)
     print("Total moves:", moves)
     print("Removed Cells:", removed_cells)
-    for i,j in removed_cells_positions:
-        print({i},{j})#need to get get the remove stuff working first
+    for i, j in removed_cells_positions:
+        print(i, j)
 
 def validate_colors(rows, valid_set):
     for rrow in rows:
@@ -74,27 +77,37 @@ def validate_colors(rows, valid_set):
                 return v
     return None
 
-
-
-def remove_logic(curr_removed_cells):
+def remove_logic(curr_removed_cells, removed_cells, removed_cells_positions):
+    # This function signature now takes and returns the accumulators so there
+    # is no reliance on outer-scope variables.
     removed_cells += len(curr_removed_cells)
     removed_cells_positions += curr_removed_cells
 
-    # Removing cells from rows
-    for i in len(curr_removed_cells): # i is a row, rows are arrays
-        for j in len(i): # getting a single cell
-            pass
-                
-        
+    # Placeholder for removal logic
+    # Implement actual removal/update logic specific to your game here
 
-    # parts that need to be implemented:
-    # 1. Remove logic; this includes what is allowed to be removed and 
-    #    removing from the matrix, then updating the matrix cells like in 
-    #    the game
-    # 2. point system; this includes how many points you get for removing 
-    #    certain color combos/number of a color removed
-    # 3. output; this includes how to output the results of the game in its format
-    # 4. Making a reverse matrix so that the bottom left corner is (1,1)
+    return removed_cells, removed_cells_positions
+
+def inverse_matrix(matrix):
+    """
+    Rotate the matrix by 180 degrees so top-left becomes bottom-right.
+    Returns a new list-of-lists with integer entries.
+    """
+    # Validate input is rectangular
+    if not matrix or not all(len(row) == len(matrix[0]) for row in matrix):
+        raise ValueError("Input must be a non-empty rectangular matrix")
+
+    # Simple Python implementation (no numeric inversion)
+    # Reverse the order of rows, and reverse each row
+    rotated = [row[::-1] for row in matrix[::-1]]
+
+    # Ensure elements are ints
+    try:
+        rotated = [[int(x) for x in row] for row in rotated]
+    except Exception as e:
+        raise ValueError(f"Non-integer matrix elements: {e}")
+
+    return rotated
 
 if __name__ == "__main__":
     solve_game()
