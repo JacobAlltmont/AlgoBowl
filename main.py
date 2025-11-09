@@ -77,37 +77,43 @@ def validate_colors(rows, valid_set):
                 return v
     return None
 
-def remove_logic(curr_removed_cells, removed_cells, removed_cells_positions):
-    # This function signature now takes and returns the accumulators so there
-    # is no reliance on outer-scope variables.
+
+
+def remove_logic(curr_removed_cells, rows):
+    curr_removed_cells = {}
+    '''
     removed_cells += len(curr_removed_cells)
     removed_cells_positions += curr_removed_cells
+    '''
+    visited = []
+    for row in range(len(rows)-1):
+        for col in range(len(rows[0])-1):
+            if rows[row][col] == rows[row][col-1] and (row,col-1) not in visited:
+                curr_removed_cells[rows[row][col]] = (row,col-1)
+                visited.append((row,col-1))
+            if rows[row][col] == rows[row-1][col] and (row-1,col) not in visited:
+                curr_removed_cells[rows[row][col]] = (row-1,col)
+                visited.append((row-1,col))
+            if rows[row][col] == rows[row+1][col] and (row+1,col) not in visited:
+                curr_removed_cells[rows[row][col]] = (row+1,col)
+                visited.append((row+1,col))
+            if rows[row][col] == rows[row][col+1] and (row,col+1) not in visited:
+                curr_removed_cells[rows[row][col]] = (row,col+1)
+                visited.append((row,col+1))
 
-    # Placeholder for removal logic
-    # Implement actual removal/update logic specific to your game here
+    
+def remove_column_logic(): 
+    '''
+    '''
 
-    return removed_cells, removed_cells_positions
-
-def inverse_matrix(matrix):
-    """
-    Rotate the matrix by 180 degrees so top-left becomes bottom-right.
-    Returns a new list-of-lists with integer entries.
-    """
-    # Validate input is rectangular
-    if not matrix or not all(len(row) == len(matrix[0]) for row in matrix):
-        raise ValueError("Input must be a non-empty rectangular matrix")
-
-    # Simple Python implementation (no numeric inversion)
-    # Reverse the order of rows, and reverse each row
-    rotated = [row[::-1] for row in matrix[::-1]]
-
-    # Ensure elements are ints
-    try:
-        rotated = [[int(x) for x in row] for row in rotated]
-    except Exception as e:
-        raise ValueError(f"Non-integer matrix elements: {e}")
-
-    return rotated
+    # parts that need to be implemented:
+    # 1. Remove logic; this includes what is allowed to be removed and 
+    #    removing from the matrix, then updating the matrix cells like in 
+    #    the game
+    # 2. point system; this includes how many points you get for removing 
+    #    certain color combos/number of a color removed
+    # 3. output; this includes how to output the results of the game in its format
+    # 4. Making a reverse matrix so that the bottom left corner is (1,1)
 
 if __name__ == "__main__":
     solve_game()
