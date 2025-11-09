@@ -76,16 +76,32 @@ def validate_colors(rows, valid_set):
 
 
 
-def remove_logic(curr_removed_cells):
+def remove_logic(curr_removed_cells, rows):
+    curr_removed_cells = {}
+    '''
     removed_cells += len(curr_removed_cells)
     removed_cells_positions += curr_removed_cells
+    '''
+    visited = []
+    for row in range(len(rows)-1):
+        for col in range(len(rows[0])-1):
+            if rows[row][col] == rows[row][col-1] and (row,col-1) not in visited:
+                curr_removed_cells[rows[row][col]] = (row,col-1)
+                visited.append((row,col-1))
+            if rows[row][col] == rows[row-1][col] and (row-1,col) not in visited:
+                curr_removed_cells[rows[row][col]] = (row-1,col)
+                visited.append((row-1,col))
+            if rows[row][col] == rows[row+1][col] and (row+1,col) not in visited:
+                curr_removed_cells[rows[row][col]] = (row+1,col)
+                visited.append((row+1,col))
+            if rows[row][col] == rows[row][col+1] and (row,col+1) not in visited:
+                curr_removed_cells[rows[row][col]] = (row,col+1)
+                visited.append((row,col+1))
 
-    # Removing cells from rows
-    for i in len(curr_removed_cells): # i is a row, rows are arrays
-        for j in len(i): # getting a single cell
-            pass
-                
-        
+    
+def remove_column_logic(): 
+    '''
+    '''
 
     # parts that need to be implemented:
     # 1. Remove logic; this includes what is allowed to be removed and 
