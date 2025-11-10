@@ -103,15 +103,13 @@ def remove_logic(curr_removed_cells, rows):
 
 
 def inverse_matrix(matrix):
-    """
-    Rotate the matrix by 180 degrees so top-left becomes bottom-right.
-    Returns a new list-of-lists with integer entries.
-    """
+    # Rotate the matrix by 180 degrees so top-left becomes bottom-right.
+    # Returns a new list-of-lists with integer entries.
+    
     # Validate input is rectangular
     if not matrix or not all(len(row) == len(matrix[0]) for row in matrix):
         raise ValueError("Input must be a non-empty rectangular matrix")
-
-    # Simple Python implementation (no numeric inversion)
+    
     # Reverse the order of rows, and reverse each row
     rotated = [row[::-1] for row in matrix[::-1]]
 
@@ -123,18 +121,34 @@ def inverse_matrix(matrix):
 
     return rotated
 
-def remove_column_logic(): 
-    '''
-    '''
-
+def remove_column_logic(matrix): 
+    # Identify columns to remove
+    check = True
+    columns_to_remove = set()
+    for i in range(len(matrix[0])):  # for each column
+        for j in range(0, len(matrix)):  # for each row starting from second
+            if matrix[j][i] == None:
+                check = True
+            else:
+                check = False
+                break
+        if check == True:
+            columns_to_remove.add(i)
+    for k in columns_to_remove:
+    
+    pass
+    
+    
+    
+    
+    
+    
     # parts that need to be implemented:
     # 1. Remove logic; this includes what is allowed to be removed and 
     #    removing from the matrix, then updating the matrix cells like in 
     #    the game
-    # 2. point system; this includes how many points you get for removing 
-    #    certain color combos/number of a color removed
-    # 3. output; this includes how to output the results of the game in its format
-    # 4. Making a reverse matrix so that the bottom left corner is (1,1)
+    # 2. output; this includes how to output the results of the game in its format
+    # 3. Input validation; this includes checking if the input is valid for other peoples inputs and implementation
 
 if __name__ == "__main__":
     solve_game()
