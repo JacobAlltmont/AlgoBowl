@@ -122,21 +122,33 @@ def inverse_matrix(matrix):
     return rotated
 
 def remove_column_logic(matrix): 
-    # Identify columns to remove
-    check = True
+    # Identify columns to remove (columns where every entry is None)
+    if not matrix:
+        return []
+
+    n_cols = len(matrix[0])
     columns_to_remove = set()
-    for i in range(len(matrix[0])):  # for each column
-        for j in range(0, len(matrix)):  # for each row starting from second
-            if matrix[j][i] == None:
-                check = True
-            else:
-                check = False
+    for i in range(n_cols):  # for each column
+        all_none = True
+        for j in range(len(matrix)):
+            if matrix[j][i] is not None:
+                all_none = False
                 break
-        if check == True:
+        if all_none:
             columns_to_remove.add(i)
-    for k in columns_to_remove:
-    
-    pass
+
+    # If nothing to remove, return a shallow copy of the original matrix
+    if not columns_to_remove:
+        return [row[:] for row in matrix]
+
+    # Build and return a new matrix excluding the columns in columns_to_remove
+    cols_keep = [k for k in range(n_cols) if k not in columns_to_remove]
+    new_matrix = []
+    for row in matrix:
+        new_row = [row[k] for k in cols_keep]
+        new_matrix.append(new_row)
+
+    return new_matrix
     
     
     
