@@ -88,19 +88,24 @@ def remove_logic(curr_removed_cells, rows):
     visited = []
     for row in range(len(rows)-1):
         for col in range(len(rows[0])-1):
+            # Check adjacent cells (up, down, left, right)
             if rows[row][col] == rows[row][col-1] and (row,col-1) not in visited:
+                # Left
                 curr_removed_cells[rows[row][col]] = (row,col-1)
                 visited.append((row,col-1))
             if rows[row][col] == rows[row-1][col] and (row-1,col) not in visited:
+                # Up
                 curr_removed_cells[rows[row][col]] = (row-1,col)
                 visited.append((row-1,col))
             if rows[row][col] == rows[row+1][col] and (row+1,col) not in visited:
+                # Down
                 curr_removed_cells[rows[row][col]] = (row+1,col)
                 visited.append((row+1,col))
             if rows[row][col] == rows[row][col+1] and (row,col+1) not in visited:
+                # Right
                 curr_removed_cells[rows[row][col]] = (row,col+1)
                 visited.append((row,col+1))
-
+    
 
 def inverse_matrix(matrix):
     # Rotate the matrix by 180 degrees so top-left becomes bottom-right.
