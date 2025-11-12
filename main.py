@@ -54,16 +54,20 @@ def solve_game():
         except ValueError as e:
             print(f"Matrix rotation failed: {e}")
             return
+    
+    rows = transpose_matrix(rows)
 
     # print the rows in matrix form
     for rrow in rows:
         print(' '.join(str(v) for v in rrow))
-    remove_cells = (get_connected_colors(rows, 3, 3))
-    input(f"Press Enter to remove these cells {remove_cells}")
-    os.system("cls")
-    remove_logic(remove_cells, rows)
-    for rrow in rows:
-        print(' '.join(str(v) for v in rrow))
+    cells_to_remove = [[0, 3]]
+    for i, j in cells_to_remove:
+        remove_cells = (get_connected_colors(rows, i, j))
+        input(f"Press Enter to remove these cells {remove_cells}")
+        #os.system("cls")
+        remove_logic(remove_cells, rows)
+        for rrow in rows:
+            print(' '.join(str(v) for v in rrow))
     ## Time to solve
     
 
@@ -92,8 +96,13 @@ def remove_logic(curr_removed_cells, matrix):
     for i in matrix:
         for j in range(len(i)):
             if (matrix.index(i), j) in curr_removed_cells:
-                #i[j] = None
-                i.pop(j)
+                i[j] = None
+    for i in matrix:
+        while None in i:
+            i.remove(None)
+    
+    while None in matrix:
+        matrix.remove(None)
 
 def get_connected_colors(rows, x, y): # color is a 1-8, rows is the graph
     visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
@@ -116,7 +125,7 @@ def get_connected_colors(rows, x, y): # color is a 1-8, rows is the graph
         dfs(r, c-1)
         dfs(r, c+1)
 
-    dfs(x, y)
+    dfs(y, x)
     return found_colors
     
 
