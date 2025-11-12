@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 def solve_game():
     # Inputs
@@ -57,7 +58,12 @@ def solve_game():
     # print the rows in matrix form
     for rrow in rows:
         print(' '.join(str(v) for v in rrow))
-    print(get_connected_colors(rows, 1, 1))
+    remove_cells = (get_connected_colors(rows, 3, 3))
+    input(f"Press Enter to remove these cells {remove_cells}")
+    os.system("cls")
+    remove_logic(remove_cells, rows)
+    for rrow in rows:
+        print(' '.join(str(v) for v in rrow))
     ## Time to solve
     
 
@@ -82,37 +88,17 @@ def validate_colors(rows, valid_set):
 
 
 
-def remove_logic(curr_removed_cells, rows):
-    curr_removed_cells = {}
-    '''
-    removed_cells += len(curr_removed_cells)
-    removed_cells_positions += curr_removed_cells
-    '''
-    visited = []
-    for row in range(len(rows)-1):
-        for col in range(len(rows[0])-1):
-            # Check adjacent cells (up, down, left, right)
-            if rows[row][col] == rows[row][col-1] and (row,col-1) not in visited:
-                # Left
-                curr_removed_cells[rows[row][col]] = (row,col-1)
-                visited.append((row,col-1))
-            if rows[row][col] == rows[row-1][col] and (row-1,col) not in visited:
-                # Up
-                curr_removed_cells[rows[row][col]] = (row-1,col)
-                visited.append((row-1,col))
-            if rows[row][col] == rows[row+1][col] and (row+1,col) not in visited:
-                # Down
-                curr_removed_cells[rows[row][col]] = (row+1,col)
-                visited.append((row+1,col))
-            if rows[row][col] == rows[row][col+1] and (row,col+1) not in visited:
-                # Right
-                curr_removed_cells[rows[row][col]] = (row,col+1)
-                visited.append((row,col+1))
+def remove_logic(curr_removed_cells, matrix):
+    for i in matrix:
+        for j in range(len(i)):
+            if (matrix.index(i), j) in curr_removed_cells:
+                #i[j] = None
+                i.pop(j)
 
 def get_connected_colors(rows, x, y): # color is a 1-8, rows is the graph
     visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
     
-    color = rows[x][y]
+    color = rows[y][x]
     found_colors = []
 
     def dfs(r, c):
