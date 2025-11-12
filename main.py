@@ -62,10 +62,10 @@ def solve_game():
     for rrow in rows:
         print(' '.join(str(v) for v in rrow))
     
-    cells_to_remove = [[0, 3]]
+    cells_to_remove = [[0, 3], [0, 3], [1, 3], [1, 3], [1, 3], [1, 3], [3, 4], [0, 4], [0, 4], [0, 4]]
     for i, j in cells_to_remove:
         remove_cells = (get_connected_colors(rows, i, j))
-        input(f"Press Enter to remove these cells {remove_cells}")
+        input(f"Press Enter to remove these cells {remove_cells}, clicked [{i, j}]")
         #os.system("cls")
         remove_logic(remove_cells, rows)
         for rrow in rows:
@@ -103,8 +103,8 @@ def remove_logic(curr_removed_cells, matrix):
         while None in i:
             i.remove(None)
     
-    while None in matrix:
-        matrix.remove(None)
+    while [] in matrix:
+        matrix.remove([])
 
 
 def get_connected_colors(rows, x, y):  # color is a 1-8, rows is the graph
@@ -114,7 +114,7 @@ def get_connected_colors(rows, x, y):  # color is a 1-8, rows is the graph
     found_colors = []
 
     def dfs(r, c):
-        if r < 0 or r >= len(rows) or c < 0 or c >= len(rows[0]):
+        if r < 0 or r >= len(rows) or c < 0 or c >= len(rows[r]):
             return 0
         if visited[r][c] or rows[r][c] != color:
             return 0
