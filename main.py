@@ -129,11 +129,12 @@ def get_connected_colors(rows, x, y): # color is a 1-8, rows is the graph
         dfs(r+1, c)
         dfs(r, c-1)
         dfs(r, c+1)
+
     dfs(x, y)
     return found_colors
     
 
-    
+
 
 def inverse_matrix(matrix):
     # Rotate the matrix by 180 degrees so top-left becomes bottom-right.
@@ -154,6 +155,12 @@ def inverse_matrix(matrix):
         raise ValueError(f"Non-integer matrix elements: {e}")
 
     return rotated
+
+def transpose_matrix(matrix):
+    # Transpose the matrix(swap rows and columsns)
+    matrix = [list(row) for row in zip(*matrix)]
+    return matrix
+
 
 def remove_column_logic(matrix): 
     # Identify columns to remove (columns where every entry is None)
@@ -183,12 +190,8 @@ def remove_column_logic(matrix):
         new_matrix.append(new_row)
 
     return new_matrix
-    
-    
-    
-    
-    
-    
+
+
     # parts that need to be implemented:
     # 1. Remove logic; this includes what is allowed to be removed and 
     #    removing from the matrix, then updating the matrix cells like in 
