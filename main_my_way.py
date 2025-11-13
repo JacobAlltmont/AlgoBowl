@@ -67,39 +67,27 @@ def solve_game():
     for x in range(len(rows)-1):
         for y in range(len(rows[0])-1):
             if not visited[x][y]:
-                group = []
-                if rows[x][y] == rows[x-1][y]:
-                    group = get_connected_colors(rows, x, y)
-                    output_lst[rows[x][y]] = group
-                    total_points += game_score(len(group))
-                    print(f"Removing cells {group} at clicked [{x, y}]")
-                if rows[x][y] == rows[x][y-1]:
-                    group = get_connected_colors(rows, x, y)
-                    output_lst[rows[x][y]] = group
-                    total_points += game_score(len(group))
-                    print(f"Removing cells {group} at clicked [{x, y}]")
-                if rows[x][y] == rows[x+1][y]:
-                    group = get_connected_colors(rows, x, y)
-                    output_lst[rows[x][y]] = group
-                    total_points += game_score(len(group))
-                    print(f"Removing cells {group} at clicked [{x, y}]")
-                if rows[x][y] == rows[x][y+1]:
-                    group = get_connected_colors(rows, x, y)
-                    output_lst[rows[x][y]] = group
-                    total_points += game_score(len(group))
-                    print(f"Removing cells {group} at clicked [{x, y}]")
-                print(f"Removing cells {group} at clicked [{x, y}]")
+                group = get_connected_colors(rows, x, y)
+                if len(group) < 2:
+                    continue
+                # Update total points
+                total_points += game_score(len(group)+1)
+                print("total points for this move: ", total_points)
+                # Record the move
+                output_lst[rows[x][y]] = group
                 remove_logic(group, rows)
+                print(output_lst)
+                print(f"Removing cells {group} at clicked [{x}, {y}]")
                 if rows[x] is None:
                     rows = remove_column_logic(rows)
                 for i, j in group:
                     visited[i][j] = True
 
     # Update global variables
+   
     moves = len(output_lst)
     # Output the game results
     output_game(total_points, moves, output_lst)
-
 
 def game_score(number_of_cells):
     # Calculate the score based on the current state of the game
@@ -111,7 +99,7 @@ def output_game(total_points, moves, group):
     print(total_points)
     print(moves)
     for key, value in group.items():
-        print(f"{key} {len(value)+1} {value[-1][0]} {value[-1][1]}")
+        print(f"{key} {len(value)+1} {value[-1][0]+1} {value[-1][1]+1}")
 
 
 def validate_colors(rows, valid_set):
@@ -128,11 +116,13 @@ def remove_logic(curr_removed_cells, matrix):
             if (matrix.index(i), j) in curr_removed_cells:
                 i[j] = None
 
-
+'''
+TODO: found colors is only finding two colors even when more are connected, need to fix
+'''
 def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
     visited = [[False for _ in range(len(matrix[0]))]
                for _ in range(len(matrix))]
-
+    
     color = matrix[x][y]
     found_colors = []
 
@@ -151,6 +141,7 @@ def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
         dfs(r, c-1)
         dfs(r, c+1)
     dfs(x, y)
+    print("group size:", len(found_colors))
     return found_colors
 
 
