@@ -61,18 +61,6 @@ def solve_game():
             print(f"Matrix rotation failed: {e}")
             return
 
-    # print the rows in matrix form
-    '''
-    for rrow in rows:
-        print(' '.join(str(v) for v in rrow))
-    remove_cells = (get_connected_colors(rows, 3, 3))
-    input(f"Press Enter to remove these cells {remove_cells}")
-    os.system("cls")
-    remove_logic(remove_cells, rows)
-    for rrow in rows:
-        print(' '.join(str(v) for v in rrow))
-    '''
-
     # Time to solve
     output_lst = {}
     visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
@@ -87,9 +75,10 @@ def solve_game():
                     rows = remove_column_logic(rows)
                 for i, j in group:
                     visited[i][j] = True
-    
-    
+
+    # Update global variables
     moves = len(output_lst)
+    # Output the game results
     output_game(total_points, moves, output_lst)
 
 
@@ -102,9 +91,8 @@ def game_score(number_of_cells):
 def output_game(total_points, moves, group):
     print(total_points)
     print(moves)
-    for key,value in group.items():
+    for key, value in group.items():
         print(f"{key} {len(value)} {value[0][0]} {value[0][1]}")
-
 
 
 def validate_colors(rows, valid_set):
@@ -201,6 +189,7 @@ def remove_column_logic(matrix):
         new_matrix.append(new_row)
 
     return new_matrix
+
 
     # parts that need to be implemented:
     # 1. Remove logic; this includes what is allowed to be removed and
