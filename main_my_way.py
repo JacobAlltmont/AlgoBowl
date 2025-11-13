@@ -92,7 +92,7 @@ def output_game(total_points, moves, group):
     print(total_points)
     print(moves)
     for key, value in group.items():
-        print(f"{key} {len(value)} {value[0][0]} {value[0][1]}")
+        print(f"{key} {len(value)} {value[-1][0]} {value[-1][1]}")
 
 
 def validate_colors(rows, valid_set):
