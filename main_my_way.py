@@ -72,18 +72,23 @@ def solve_game():
                     group = get_connected_colors(rows, x, y)
                     output_lst[rows[x][y]] = group
                     total_points += game_score(len(group))
+                    print(f"Removing cells {group} at clicked [{x, y}]")
                 if rows[x][y] == rows[x][y-1]:
                     group = get_connected_colors(rows, x, y)
                     output_lst[rows[x][y]] = group
                     total_points += game_score(len(group))
+                    print(f"Removing cells {group} at clicked [{x, y}]")
                 if rows[x][y] == rows[x+1][y]:
                     group = get_connected_colors(rows, x, y)
                     output_lst[rows[x][y]] = group
                     total_points += game_score(len(group))
+                    print(f"Removing cells {group} at clicked [{x, y}]")
                 if rows[x][y] == rows[x][y+1]:
                     group = get_connected_colors(rows, x, y)
                     output_lst[rows[x][y]] = group
                     total_points += game_score(len(group))
+                    print(f"Removing cells {group} at clicked [{x, y}]")
+                print(f"Removing cells {group} at clicked [{x, y}]")
                 remove_logic(group, rows)
                 if rows[x] is None:
                     rows = remove_column_logic(rows)
