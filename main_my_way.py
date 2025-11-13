@@ -1,7 +1,12 @@
 import numpy as np
 import os
 
+
 def solve_game():
+    # global Variables
+    total_points = 0
+    moves = 0
+
     # Inputs
     # read dimensions
     r, c = map(int, input().split())
@@ -51,11 +56,13 @@ def solve_game():
     if r == c and r >= 2:
         try:
             rows = inverse_matrix(rows)
+            rows = transpose_matrix(rows)
         except ValueError as e:
             print(f"Matrix rotation failed: {e}")
             return
 
     # print the rows in matrix form
+    '''
     for rrow in rows:
         print(' '.join(str(v) for v in rrow))
     remove_cells = (get_connected_colors(rows, 3, 3))
@@ -64,20 +71,41 @@ def solve_game():
     remove_logic(remove_cells, rows)
     for rrow in rows:
         print(' '.join(str(v) for v in rrow))
-    ## Time to solve
+    '''
+
+    # Time to solve
+    output_lst = {}
+    visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
+    for x in range(len(rows)):
+        for y in range(len(rows[0])):
+            if not visited[x][y]:
+                group = get_connected_colors(rows, x, y)
+                output_lst[rows[x][y]] = group
+                total_points += game_score(len(group))
+                remove_logic(group, rows)
+                if rows[x] is None:
+                    rows = remove_column_logic(rows)
+                for i, j in group:
+                    visited[i][j] = True
     
+    
+    moves = len(output_lst)
+    output_game(total_points, moves, output_lst)
+
 
 def game_score(number_of_cells):
     # Calculate the score based on the current state of the game
     total_points = (number_of_cells-1)**2
     return total_points
 
-def output_game(total_points, moves, removed_cells, removed_cells_positions):
-    print("Total Points:", total_points)
-    print("Total moves:", moves)
-    print("Removed Cells:", removed_cells)
-    for i, j in removed_cells_positions:
-        print(i, j)
+
+def output_game(total_points, moves, group):
+    print(total_points)
+    print(moves)
+    for key,value in group.items():
+        print(f"{key} {len(value)} {value[0][0]} {value[0][1]}")
+
+
 
 def validate_colors(rows, valid_set):
     for rrow in rows:
@@ -87,17 +115,17 @@ def validate_colors(rows, valid_set):
     return None
 
 
-
 def remove_logic(curr_removed_cells, matrix):
     for i in matrix:
         for j in range(len(i)):
             if (matrix.index(i), j) in curr_removed_cells:
                 i[j] = None
-    
 
-def get_connected_colors(matrix, x, y): # color is a 1-8, rows is the graph
-    visited = [[False for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
-    
+
+def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
+    visited = [[False for _ in range(len(matrix[0]))]
+               for _ in range(len(matrix))]
+
     color = matrix[x][y]
     found_colors = []
 
@@ -106,7 +134,7 @@ def get_connected_colors(matrix, x, y): # color is a 1-8, rows is the graph
             return 0
         if visited[r][c] or matrix[r][c] != color:
             return 0
-        
+
         visited[r][c] = True
         curr_cell = (r, c)
         found_colors.append(curr_cell)
@@ -117,18 +145,21 @@ def get_connected_colors(matrix, x, y): # color is a 1-8, rows is the graph
         dfs(r, c+1)
     dfs(x, y)
     return found_colors
-    
 
-    
+
+def transpose_matrix(matrix):
+    matrix = [list(row) for row in zip(*matrix)]
+    return matrix
+
 
 def inverse_matrix(matrix):
     # Rotate the matrix by 180 degrees so top-left becomes bottom-right.
     # Returns a new list-of-lists with integer entries.
-    
+
     # Validate input is rectangular
     if not matrix or not all(len(row) == len(matrix[0]) for row in matrix):
         raise ValueError("Input must be a non-empty rectangular matrix")
-    
+
     # Note, do not reverse the order as we are supposed to search bottom left, not bottom right
     # Reverse the order of rows, and reverse each row
     rotated = [row[::1] for row in matrix[::-1]]
@@ -141,7 +172,8 @@ def inverse_matrix(matrix):
 
     return rotated
 
-def remove_column_logic(matrix): 
+
+def remove_column_logic(matrix):
     # Identify columns to remove (columns where every entry is None)
     if not matrix:
         return []
@@ -169,18 +201,12 @@ def remove_column_logic(matrix):
         new_matrix.append(new_row)
 
     return new_matrix
-    
-    
-    
-    
-    
-    
+
     # parts that need to be implemented:
-    # 1. Remove logic; this includes what is allowed to be removed and 
-    #    removing from the matrix, then updating the matrix cells like in 
+    # 1. Remove logic; this includes what is allowed to be removed and
+    #    removing from the matrix, then updating the matrix cells like in
     #    the game
     # 2. output; this includes how to output the results of the game in its format
     # 3. Input validation; this includes checking if the input is valid for other peoples inputs and implementation
-
 if __name__ == "__main__":
     solve_game()
