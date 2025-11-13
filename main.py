@@ -3,6 +3,10 @@ import os
 
 
 def solve_game():
+    # global Variables
+    total_points = 0
+    moves = 0
+
     # Inputs
     # read dimensions
     r, c = map(int, input().split())
@@ -52,26 +56,39 @@ def solve_game():
     if r == c and r >= 2:
         try:
             rows = inverse_matrix(rows)
+            rows = transpose_matrix(rows)
         except ValueError as e:
             print(f"Matrix rotation failed: {e}")
             return
-    
-    rows = transpose_matrix(rows)
 
-    # print the rows in matrix form
-    for rrow in rows:
-        print(' '.join(str(v) for v in rrow))
-    
-    cells_to_remove = [[0, 3], [0, 3], [1, 3], [1, 3], [1, 3], [1, 3], [3, 4], [0, 4], [0, 4], [0, 4]]
-    for i, j in cells_to_remove:
-        remove_cells = (get_connected_colors(rows, i, j))
-        input(f"Press Enter to remove these cells {remove_cells}, clicked [{i, j}]")
-        #os.system("cls")
-        if len(remove_cells) > 1:
-            remove_logic(remove_cells, rows)
-        for rrow in rows:
-            print(' '.join(str(v) for v in rrow))
-    ## Time to solve
+    # Time to solve
+    colors = []
+    groupings = []
+    visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
+    for x in range(len(rows)-1):
+        for y in range(len(rows[0])-1):
+            if not visited[x][y]:
+                group = get_connected_colors(rows, x, y)
+                if len(group) < 2:
+                    continue
+                # Update total points
+                total_points += game_score(len(group)+1)
+                print(len(group))
+                # Record the move
+                #I need to store each move in a dictionary with the color as key and the list of cells as value
+                colors.append(rows[x][y])
+                groupings.append(group)
+                moves += 1
+                # Remove the cells from the matrix
+                remove_logic(group, rows)
+                if rows[x] is None:
+                    rows = remove_column_logic(rows)
+                for i, j in group:
+                    visited[i][j] = True
+
+    # Output the game results
+    output_game(total_points, moves, colors, groupings)
+
 
 def game_score(number_of_cells):
     # Calculate the score based on the current state of the game
@@ -79,12 +96,11 @@ def game_score(number_of_cells):
     return total_points
 
 
-def output_game(total_points, moves, removed_cells, removed_cells_positions):
-    print("Total Points:", total_points)
-    print("Total moves:", moves)
-    print("Removed Cells:", removed_cells)
-    for i, j in removed_cells_positions:
-        print(i, j)
+def output_game(total_points, moves, colors, groupings):
+    print(total_points)
+    print(moves)
+    for color, group in zip(colors, groupings):
+        print(f"{color} {len(group)+1} {group[-1][0]+1} {group[-1][1]+1}")
 
 
 def validate_colors(rows, valid_set):
@@ -100,24 +116,19 @@ def remove_logic(curr_removed_cells, matrix):
         for j in range(len(i)):
             if (matrix.index(i), j) in curr_removed_cells:
                 i[j] = None
-    for i in matrix:
-        while None in i:
-            i.remove(None)
-    
-    while [] in matrix:
-        matrix.remove([])
 
 
-def get_connected_colors(rows, x, y):  # color is a 1-8, rows is the graph
-    visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
+def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
+    visited = [[False for _ in range(len(matrix[0]))]
+               for _ in range(len(matrix))]
 
-    color = rows[y][x]
+    color = matrix[x][y]
     found_colors = []
 
     def dfs(r, c):
-        if r < 0 or r >= len(rows) or c < 0 or c >= len(rows[r]):
+        if r < 0 or r >= len(matrix) or c < 0 or c >= len(matrix[0]):
             return 0
-        if visited[r][c] or rows[r][c] != color:
+        if visited[r][c] or matrix[r][c] != color:
             return 0
 
         visited[r][c] = True
@@ -128,9 +139,13 @@ def get_connected_colors(rows, x, y):  # color is a 1-8, rows is the graph
         dfs(r+1, c)
         dfs(r, c-1)
         dfs(r, c+1)
-
-    dfs(y, x)
+    dfs(x, y)
     return found_colors
+
+
+def transpose_matrix(matrix):
+    matrix = [list(row) for row in zip(*matrix)]
+    return matrix
 
 
 def inverse_matrix(matrix):
@@ -152,17 +167,6 @@ def inverse_matrix(matrix):
         raise ValueError(f"Non-integer matrix elements: {e}")
 
     return rotated
-
-
-def transpose_matrix(matrix):
-    # Transpose the matrix(swap rows and columsns)
-    try:
-        matrix = [list(row) for row in zip(*matrix)]
-        if not matrix or not all(len(row) == len(matrix[0]) for row in matrix):
-            raise ValueError("Input must be a non-empty rectangular matrix")
-    except Exception as e:
-        raise ValueError(f"Non-integer matrix elements: {e}")
-    return matrix
 
 
 def remove_column_logic(matrix):
@@ -200,7 +204,5 @@ def remove_column_logic(matrix):
     #    the game
     # 2. output; this includes how to output the results of the game in its format
     # 3. Input validation; this includes checking if the input is valid for other peoples inputs and implementation
-
-
 if __name__ == "__main__":
     solve_game()
