@@ -64,12 +64,25 @@ def solve_game():
     # Time to solve
     output_lst = {}
     visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
-    for x in range(len(rows)):
-        for y in range(len(rows[0])):
+    for x in range(len(rows)-1):
+        for y in range(len(rows[0])-1):
             if not visited[x][y]:
-                group = get_connected_colors(rows, x, y)
-                output_lst[rows[x][y]] = group
-                total_points += game_score(len(group))
+                if rows[x][y] == rows[x-1][y]:
+                    group = get_connected_colors(rows, x, y)
+                    output_lst[rows[x][y]] = group
+                    total_points += game_score(len(group))
+                if rows[x][y] == rows[x][y-1]:
+                    group = get_connected_colors(rows, x, y)
+                    output_lst[rows[x][y]] = group
+                    total_points += game_score(len(group))
+                if rows[x][y] == rows[x+1][y]:
+                    group = get_connected_colors(rows, x, y)
+                    output_lst[rows[x][y]] = group
+                    total_points += game_score(len(group))
+                if rows[x][y] == rows[x][y+1]:
+                    group = get_connected_colors(rows, x, y)
+                    output_lst[rows[x][y]] = group
+                    total_points += game_score(len(group))
                 remove_logic(group, rows)
                 if rows[x] is None:
                     rows = remove_column_logic(rows)
@@ -92,7 +105,7 @@ def output_game(total_points, moves, group):
     print(total_points)
     print(moves)
     for key, value in group.items():
-        print(f"{key} {len(value)} {value[-1][0]} {value[-1][1]}")
+        print(f"{key} {len(value)+1} {value[-1][0]} {value[-1][1]}")
 
 
 def validate_colors(rows, valid_set):
