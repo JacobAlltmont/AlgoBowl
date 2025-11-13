@@ -62,21 +62,28 @@ def solve_game():
             return
 
     # Time to solve
+
+    # List to store colors for output
     colors = []
+    # List to store groupings for output
     groupings = []
     visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
     for x in range(len(rows)-1):
         for y in range(len(rows[0])-1):
+            # Skip empty cells
+            group = []
+            # Skip already visited cells
             if not visited[x][y]:
                 group = get_connected_colors(rows, x, y)
+                # Only consider groups of size 2 or more
                 if len(group) < 2:
                     continue
                 # Update total points
                 total_points += game_score(len(group)+1)
-                print(len(group))
                 # Record the move
-                #I need to store each move in a dictionary with the color as key and the list of cells as value
+                # Append color
                 colors.append(rows[x][y])
+                #Append grouping
                 groupings.append(group)
                 moves += 1
                 # Remove the cells from the matrix
