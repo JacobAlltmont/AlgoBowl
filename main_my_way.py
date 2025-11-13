@@ -67,6 +67,7 @@ def solve_game():
     for x in range(len(rows)-1):
         for y in range(len(rows[0])-1):
             if not visited[x][y]:
+                group = []
                 if rows[x][y] == rows[x-1][y]:
                     group = get_connected_colors(rows, x, y)
                     output_lst[rows[x][y]] = group
