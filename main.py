@@ -67,7 +67,8 @@ def solve_game():
         remove_cells = (get_connected_colors(rows, i, j))
         input(f"Press Enter to remove these cells {remove_cells}, clicked [{i, j}]")
         #os.system("cls")
-        remove_logic(remove_cells, rows)
+        if len(remove_cells) > 1:
+            remove_logic(remove_cells, rows)
         for rrow in rows:
             print(' '.join(str(v) for v in rrow))
     ## Time to solve
