@@ -72,22 +72,21 @@ def solve_game():
                     continue
                 # Update total points
                 total_points += game_score(len(group)+1)
-                print("total points for this move: ", total_points)
                 # Record the move
-                output_lst[rows[x][y]] = group
+                if rows[x][y] not in output_lst:
+                    output_lst[rows[x][y]] = []
+                output_lst[rows[x][y]].append((x, y))
+                moves += 1
+                # Remove the cells from the matrix
                 remove_logic(group, rows)
-                print(output_lst)
-                print(f"Removing cells {group} at clicked [{x}, {y}]")
                 if rows[x] is None:
                     rows = remove_column_logic(rows)
                 for i, j in group:
                     visited[i][j] = True
 
-    # Update global variables
-   
-    moves = len(output_lst)
     # Output the game results
     output_game(total_points, moves, output_lst)
+
 
 def game_score(number_of_cells):
     # Calculate the score based on the current state of the game
@@ -116,13 +115,11 @@ def remove_logic(curr_removed_cells, matrix):
             if (matrix.index(i), j) in curr_removed_cells:
                 i[j] = None
 
-'''
-TODO: found colors is only finding two colors even when more are connected, need to fix
-'''
+
 def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
     visited = [[False for _ in range(len(matrix[0]))]
                for _ in range(len(matrix))]
-    
+
     color = matrix[x][y]
     found_colors = []
 
@@ -141,7 +138,6 @@ def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
         dfs(r, c-1)
         dfs(r, c+1)
     dfs(x, y)
-    print("group size:", len(found_colors))
     return found_colors
 
 
@@ -199,7 +195,6 @@ def remove_column_logic(matrix):
         new_matrix.append(new_row)
 
     return new_matrix
-
 
     # parts that need to be implemented:
     # 1. Remove logic; this includes what is allowed to be removed and
