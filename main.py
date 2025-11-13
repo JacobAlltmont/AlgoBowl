@@ -104,6 +104,7 @@ def game_score(number_of_cells):
 
 
 def output_game(total_points, moves, colors, groupings):
+    # Output the game results in the specified format
     print(total_points)
     print(moves)
     for color, group in zip(colors, groupings):
@@ -111,6 +112,7 @@ def output_game(total_points, moves, colors, groupings):
 
 
 def validate_colors(rows, valid_set):
+    # Validate that all colors in the matrix are within the valid set
     for rrow in rows:
         for v in rrow:
             if v not in valid_set:
@@ -119,7 +121,9 @@ def validate_colors(rows, valid_set):
 
 
 def remove_logic(curr_removed_cells, matrix):
+    # Remove the specified cells from the matrix by setting them to None
     for i in matrix:
+        # Iterate through each cell in the row
         for j in range(len(i)):
             if (matrix.index(i), j) in curr_removed_cells:
                 i[j] = None
@@ -128,18 +132,22 @@ def remove_logic(curr_removed_cells, matrix):
 def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
     visited = [[False for _ in range(len(matrix[0]))]
                for _ in range(len(matrix))]
-
+    # Start DFS from the initial position
     color = matrix[x][y]
+    # List to store found connected cells of the same color
     found_colors = []
 
     def dfs(r, c):
+        # Base cases, return if out of bounds or already visited or different color
         if r < 0 or r >= len(matrix) or c < 0 or c >= len(matrix[0]):
             return 0
         if visited[r][c] or matrix[r][c] != color:
             return 0
-
+        # Mark the cell as visited and add to found colors
         visited[r][c] = True
+        # Store the current cell
         curr_cell = (r, c)
+        # Append the current cell to the found colors list
         found_colors.append(curr_cell)
 
         dfs(r-1, c)
@@ -151,7 +159,15 @@ def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
 
 
 def transpose_matrix(matrix):
-    matrix = [list(row) for row in zip(*matrix)]
+    # Transpose the matrix (swap rows and columns).
+    # Returns a new list-of-lists.
+    try:
+        # Validate input is rectangular
+        if not matrix or not all(len(row) == len(matrix[0]) for row in matrix):
+            raise ValueError("Input must be a non-empty rectangular matrix")
+        matrix = [list(row) for row in zip(*matrix)]
+    except Exception as e:
+        raise ValueError(f"Non-integer matrix elements: {e}")
     return matrix
 
 
