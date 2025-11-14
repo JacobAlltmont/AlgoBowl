@@ -109,7 +109,7 @@ def output_game(total_points, moves, colors, groupings):
     output_lines.append(str(total_points))
     output_lines.append(str(moves))
     for color, group in zip(colors, groupings):
-        line = f"{color} {len(group)+1} {group[-1][0]+1} {group[-1][1]+1}"
+        line = f"{color} {len(group)} {group[0][1]+1} {group[0][0]+1}"
         output_lines.append(line)
     
     # Print to console
