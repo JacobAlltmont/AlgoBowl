@@ -82,12 +82,20 @@ def solve_game():
                 total_points += game_score(len(group)+1)
                 # Record the move
                 # Append color
-                colors.append(rows[x][y])
+                colors.append(rows[y][x])
                 #Append grouping
                 groupings.append(group)
                 moves += 1
+                for rrow in rows:
+                    print(' '.join(str(v) for v in rrow))
+                input()
                 # Remove the cells from the matrix
-                remove_logic(group, rows)
+                if len(group) > 1:
+                    remove_logic(group, rows)
+                    
+                    ## Make sure you see this comment please
+                    # This is where we need to reset visited
+
                 if rows[x] is None:
                     rows = remove_column_logic(rows)
                 for i, j in group:
@@ -137,13 +145,20 @@ def remove_logic(curr_removed_cells, matrix):
         for j in range(len(i)):
             if (matrix.index(i), j) in curr_removed_cells:
                 i[j] = None
+    
+    for i in matrix:
+        while None in i:
+            i.remove(None)
+
+    while None in matrix:
+        matrix.remove(None)
 
 
 def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
     visited = [[False for _ in range(len(matrix[0]))]
                for _ in range(len(matrix))]
     # Start DFS from the initial position
-    color = matrix[x][y]
+    color = matrix[y][x]
     # List to store found connected cells of the same color
     found_colors = []
 
@@ -164,7 +179,7 @@ def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
         dfs(r+1, c)
         dfs(r, c-1)
         dfs(r, c+1)
-    dfs(x, y)
+    dfs(y, x)
     return found_colors
 
 

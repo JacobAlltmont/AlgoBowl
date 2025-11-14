@@ -124,6 +124,13 @@ def remove_logic(curr_removed_cells, matrix):
         for j in range(len(i)):
             if (matrix.index(i), j) in curr_removed_cells:
                 i[j] = None
+    
+    for i in matrix:
+        while None in i:
+            i.remove(None)
+
+    while None in matrix:
+        matrix.remove(None)
 
 
 def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
