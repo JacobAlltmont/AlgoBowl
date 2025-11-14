@@ -67,15 +67,14 @@ def solve_game():
     colors = []
     # List to store groupings for output
     groupings = []
+    visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
     for x in range(len(rows)-1):
         for y in range(len(rows[0])-1):
             # Skip empty cells
             group = []
             # Skip already visited cells
-            while True:
-                group = get_connected_colors(rows, x, y)
-                if not group:
-                    break
+            if not visited[x][y]:
+                group = get_connected_colors(rows, x, y,visited)
                 # Only consider groups of size 2 or more
                 if len(group) < 2:
                     continue
@@ -92,9 +91,9 @@ def solve_game():
                 input()
                 # Remove the cells from the matrix
                 remove_logic(group, rows)
+                visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
                 # Make sure you see this comment please
                 # This is where we need to reset visited
-
                 if rows[x] is None:
                     rows = remove_column_logic(rows)
 
@@ -151,9 +150,7 @@ def remove_logic(curr_removed_cells, matrix):
         matrix.remove(None)
 
 
-def get_connected_colors(matrix, x, y):  # color is a 1-8, rows is the graph
-    visited = [[False for _ in range(len(matrix[0]))]
-               for _ in range(len(matrix))]
+def get_connected_colors(matrix, x, y,visited):  # color is a 1-8, rows is the graph
     # Start DFS from the initial position
     color = matrix[y][x]
     # List to store found connected cells of the same color
