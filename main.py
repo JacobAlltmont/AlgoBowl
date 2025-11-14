@@ -67,14 +67,15 @@ def solve_game():
     colors = []
     # List to store groupings for output
     groupings = []
-    visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
     for x in range(len(rows)-1):
         for y in range(len(rows[0])-1):
             # Skip empty cells
             group = []
             # Skip already visited cells
-            if not visited[x][y]:
+            while True:
                 group = get_connected_colors(rows, x, y)
+                if not group:
+                    break
                 # Only consider groups of size 2 or more
                 if len(group) < 2:
                     continue
@@ -83,23 +84,19 @@ def solve_game():
                 # Record the move
                 # Append color
                 colors.append(rows[y][x])
-                #Append grouping
+                # Append grouping
                 groupings.append(group)
                 moves += 1
                 for rrow in rows:
                     print(' '.join(str(v) for v in rrow))
                 input()
                 # Remove the cells from the matrix
-                if len(group) > 1:
-                    remove_logic(group, rows)
-                    
-                    ## Make sure you see this comment please
-                    # This is where we need to reset visited
+                remove_logic(group, rows)
+                # Make sure you see this comment please
+                # This is where we need to reset visited
 
                 if rows[x] is None:
                     rows = remove_column_logic(rows)
-                for i, j in group:
-                    visited[i][j] = True
 
     # Output the game results
     output_game(total_points, moves, colors, groupings)
@@ -119,11 +116,11 @@ def output_game(total_points, moves, colors, groupings):
     for color, group in zip(colors, groupings):
         line = f"{color} {len(group)} {group[0][1]+1} {group[0][0]+1}"
         output_lines.append(line)
-    
+
     # Print to console
     for line in output_lines:
         print(line)
-    
+
     # Write to file
     with open("output.txt", "w") as f:
         f.write("\n".join(output_lines))
@@ -145,7 +142,7 @@ def remove_logic(curr_removed_cells, matrix):
         for j in range(len(i)):
             if (matrix.index(i), j) in curr_removed_cells:
                 i[j] = None
-    
+
     for i in matrix:
         while None in i:
             i.remove(None)
@@ -245,6 +242,7 @@ def remove_column_logic(matrix):
         new_matrix.append(new_row)
 
     return new_matrix
+
 
 if __name__ == "__main__":
     solve_game()
