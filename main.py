@@ -68,8 +68,13 @@ def solve_game():
     # List to store groupings for output
     groupings = []
     visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
-    for x in range(len(rows)-1):
-        for y in range(len(rows[0])-1):
+    for y in range(len(rows)):
+        for x in range(len(rows[0])):
+
+            # Skip out-of-bounds cells
+            if y >= len(rows) or x >= len(rows[y]):
+                continue
+
             # Skip empty cells
             group = []
             # Skip already visited cells
@@ -91,11 +96,13 @@ def solve_game():
                 input()
                 # Remove the cells from the matrix
                 remove_logic(group, rows)
+
+                rows = remove_column_logic(rows)
                 visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
                 # Make sure you see this comment please
                 # This is where we need to reset visited
-                if rows[x] is None:
-                    rows = remove_column_logic(rows)
+                
+                visited = [[False for _ in range(len(rows[0]))] for _ in range(len(rows))]
 
     # Output the game results
     output_game(total_points, moves, colors, groupings)
@@ -135,19 +142,13 @@ def validate_colors(rows, valid_set):
 
 
 def remove_logic(curr_removed_cells, matrix):
-    # Remove the specified cells from the matrix by setting them to None
-    for i in matrix:
+    for i, j in curr_removed_cells:
         # Iterate through each cell in the row
-        for j in range(len(i)):
-            if (matrix.index(i), j) in curr_removed_cells:
-                i[j] = None
+        if i < len(matrix) and j < len(matrix[i]):
+            matrix[i][j] = None
 
-    for i in matrix:
-        while None in i:
-            i.remove(None)
-
-    while None in matrix:
-        matrix.remove(None)
+    for i in range(len(matrix)):
+        matrix[i] = [x for x in matrix[i] if x is not None]
 
 
 def get_connected_colors(matrix, x, y,visited):  # color is a 1-8, rows is the graph
