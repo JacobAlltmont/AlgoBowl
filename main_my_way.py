@@ -95,10 +95,20 @@ def game_score(number_of_cells):
 
 
 def output_game(total_points, moves, group):
-    print(total_points)
-    print(moves)
+    output_lines = []
+    output_lines.append(str(total_points))
+    output_lines.append(str(moves))
     for key, value in group.items():
-        print(f"{key} {len(value)+1} {value[-1][0]+1} {value[-1][1]+1}")
+        line = f"{key} {len(value)+1} {value[-1][0]+1} {value[-1][1]+1}"
+        output_lines.append(line)
+    
+    # Print to console
+    for line in output_lines:
+        print(line)
+    
+    # Write to file
+    with open("output.txt", "w") as f:
+        f.write("\n".join(output_lines))
 
 
 def validate_colors(rows, valid_set):

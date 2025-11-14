@@ -104,11 +104,21 @@ def game_score(number_of_cells):
 
 
 def output_game(total_points, moves, colors, groupings):
-    # Output the game results in the specified format
-    print(total_points)
-    print(moves)
+    # Build output lines
+    output_lines = []
+    output_lines.append(str(total_points))
+    output_lines.append(str(moves))
     for color, group in zip(colors, groupings):
-        print(f"{color} {len(group)+1} {group[-1][0]+1} {group[-1][1]+1}")
+        line = f"{color} {len(group)+1} {group[-1][0]+1} {group[-1][1]+1}"
+        output_lines.append(line)
+    
+    # Print to console
+    for line in output_lines:
+        print(line)
+    
+    # Write to file
+    with open("output.txt", "w") as f:
+        f.write("\n".join(output_lines))
 
 
 def validate_colors(rows, valid_set):
@@ -221,11 +231,5 @@ def remove_column_logic(matrix):
 
     return new_matrix
 
-    # parts that need to be implemented:
-    # 1. Remove logic; this includes what is allowed to be removed and
-    #    removing from the matrix, then updating the matrix cells like in
-    #    the game
-    # 2. output; this includes how to output the results of the game in its format
-    # 3. Input validation; this includes checking if the input is valid for other peoples inputs and implementation
 if __name__ == "__main__":
     solve_game()

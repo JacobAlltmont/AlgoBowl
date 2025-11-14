@@ -1,6 +1,6 @@
 import random
 
-rows, cols = 10, 10
+rows, cols = 10, 25
 
 with open(f"input{rows}x{cols}.txt", "w") as f:
     f.write(f"{rows} {cols}\n")
